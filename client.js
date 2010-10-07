@@ -28,3 +28,5 @@ client.onmessage = function(m) {
 	console.log('Got message: ' + sys.inspect(m));
 };
 
+setTimeout( function() {client.send(encode('{\"content\": \"this is the message\", \"name\": \"tass\"}'));},
+        500);
