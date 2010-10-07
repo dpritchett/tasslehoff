@@ -4,29 +4,55 @@ var sys = require('sys'),
 var frame = '~m~';
 
 function stringify(message){
-  if (Object.prototype.toString.call(message) == '[object Object]'){
-    return '~j~' + JSON.stringify(message);
-  } else {
-    return String(message);
-  }
+        if (Object.prototype.toString.call(message) == '[object Object]'){
+                return '~j~' + JSON.stringify(message);
+        } else {
+                return String(message);
+        }
 };
 
 var encode = function(messages){
-  var ret = '', message,
-      messages = Array.isArray(messages) ? messages : [messages];
-  for (var i = 0, l = messages.length; i < l; i++){
-    message = messages[i] === null || messages[i] === undefined ? '' : stringify(messages[i]);
-    ret += frame + message.length + frame + message;
-  }
-  return ret;
+        var ret = '', message,
+            messages = Array.isArray(messages) ? messages : [messages];
+        for (var i = 0, l = messages.length; i < l; i++){
+                message = messages[i] === null || messages[i] === undefined ? '' : stringify(messages[i]);
+                ret += frame + message.length + frame + message;
+        }
+        return ret;
+};
+
+var decode = function(data){
+        var messages = [], number, n;
+        do {
+                if (data.substr(0, 3) !== frame) return messages;
+                data = data.substr(3);
+                number = '', n = '';
+                for (var i = 0, l = data.length; i < l; i++){
+                        n = Number(data.substr(i, 1));
+                        if (data.substr(i, 1) == n){
+                                number += n;
+                        } else {        
+                                data = data.substr(number.length + frame.length)
+                                        number = Number(number);
+                                break;
+                        } 
+                }
+                messages.push(data.substr(0, number)); // here
+                data = data.substr(number);
+        } while(data !== '');
+        return messages;
 };
 
 var client = new WebSocket('ws://localhost:80/socket.io/websocket');
-client.send(encode('from client'));
 
 client.onmessage = function(m) {
-	console.log('Got message: ' + sys.inspect(m));
+        m = decode(m)[0];
+        console.log('Got message: ' + sys.inspect(m));
+        if (m.substr(0, 3) == '~h~'){
+                client.send(
+                                encode('~h~' + m.substr(3)));
+        }
 };
 
-setTimeout( function() {client.send(encode('{\"content\": \"this is the message\", \"name\": \"tass\"}'));},
-        500);
+setTimeout( function() {client.send(encode('{\"content\": \"I\'m bored!\", \"name\": \"Tasslehoff\"}'));},
+                500);
