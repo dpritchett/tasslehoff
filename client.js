@@ -7,24 +7,24 @@
  */
 var sys = require('sys'),
     WebSocket = require('websocket-client').WebSocket,
-    utils = require('./support/socket.io/lib/socket.io/utils.js');
+    ioutils = require('./support/socket.io/lib/socket.io/utils.js');
 
 var client = new WebSocket('ws://localhost:80/socket.io/websocket');
 
 // Note that decode returns an array of messages, we're just handling the first for now
 client.onmessage = function(m) {
-        m = utils.decode(m)[0];
+        m = ioutils.decode(m)[0];
         console.log('Got message: ' + sys.inspect(m));
         if (m.substr(0, 3) == '~h~'){
                 client.send(
-                                utils.encode('~h~' + m.substr(3)));
+                                ioutils.encode('~h~' + m.substr(3)));
         }
 };
 
 // had to delay this because i was sending before the connection was up
 setTimeout( function() {
         client.send(
-                utils.encode(
+                ioutils.encode(
                         { content: "I'm bored!", name: "Tasslehoff" }
                         )
                 );
