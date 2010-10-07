@@ -57,8 +57,9 @@ var decode = function(data){
         } while(data !== '');
         return messages;
 };
+// END COPY/PASTED CODE FROM SOCKET.IO
 
-
+//begin actual client code i've strung together to get the first connection working
 var client = new WebSocket('ws://localhost:80/socket.io/websocket');
 
 // Note that decode returns an array of messages, we're just handling the first for now
