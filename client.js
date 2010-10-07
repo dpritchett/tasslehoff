@@ -26,6 +26,9 @@ client.onmessage = function(m) {
 // had to delay this because i was sending before the connection was up
 setTimeout( function() {
         client.send(
-                utils.encode('{\"content\": \"I\'m bored!\",' +
-                        ' \"name\": \"Tasslehoff\"}'));},
-        500);
+                utils.encode(
+                        { content: "I'm bored!", name: "Tasslehoff" }
+                        )
+                );
+},
+500);
