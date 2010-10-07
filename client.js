@@ -6,10 +6,8 @@
  *          @dpritchett on twitter
  */
 var sys = require('sys'),
-    WebSocket = require('websocket-client').WebSocket;
-
-//import socket.io handling functions that i borrowed from the socket.io source
-var utils = require('./utils.js');
+    WebSocket = require('websocket-client').WebSocket,
+    utils = require('./support/socket.io/lib/socket.io/utils.js');
 
 var client = new WebSocket('ws://localhost:80/socket.io/websocket');
 
@@ -31,4 +29,4 @@ setTimeout( function() {
                         )
                 );
 },
-500);
+1000);
