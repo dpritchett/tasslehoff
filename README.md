@@ -8,11 +8,11 @@ Tasslehoff uses pgriess's [node-websocket-client](http://github.com/pgriess/node
 
 INSTALL
 -------
-* `git clone git://github.com/dpritchett/tasslehoff.git --recursive`
-* `cd tasslehoff`
+* `$ git clone git://github.com/dpritchett/tasslehoff.git --recursive`
+* `$ cd tasslehoff`
 
 Do a test run!
 --------------
-* `node client.js dpritchett.no.de`
+* `$ node client.js dpritchett.no.de`
 * Open [dpritchett.no.de](http://dpritchett.no.de) in a browser to see your client spamming the chatroom via socket.io.
 
