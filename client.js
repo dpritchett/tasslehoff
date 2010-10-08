@@ -11,33 +11,36 @@ var sys = require('sys'),
 
 //process command-line arguments i.e.
 //$ node client.js dpritchett.no.de
-var $SERVER = ( process.argv[2] || "localhost:80")
+var $SERVER = ( process.argv[2] || "localhost:80");
 if($SERVER.search(":") == -1){
         $SERVER += ":80";
 }
 
 
-var client = new WebSocket('ws://' + $SERVER + '/socket.io/websocket');
+var client = new WebSocket('ws://' + $SERVER + '/socket.io/websocket'),
+response = {
+        name: "Tasslehoff",
+        content: "I'm bored!"
+};
 
-// Note that decode returns an array of messages, we're just handling the first for now
+//note that .onmessage automatically pongs back on heartbeat pings
+//in order to avoid being dropped by the server
 client.onmessage = function(m) {
-        m = ioutils.decode(m)[0];
-        console.log('Got message: ' + sys.inspect(m));
-        // server will drop us if we don't respond to 'heartbeats'
-        // by resending the same text asap
-        var heartbeat = '~h~'
-                if (m.substr(0, 3) == heartbeat){
-                        client.send(
-                                        ioutils.encode(heartbeat + m.substr(3)));
+        m = ioutils.decode(m); //m should be an array of strings
+        var heartbeat = '~h~'; 
+        var currMsg;
+
+        while(m.length){
+                currMsg = m.pop();
+                console.log('Got message: ' + sys.inspect(currMsg));
+
+                // server will drop us if we don't respond to 'heartbeats'
+                // by resending the same text asap
+                if (currMsg.substr(0, 3) == heartbeat){
+                        client.send(ioutils.encode(heartbeat + currMsg.substr(3)));
                 }
+        }
 };
 
 // had to delay this because i was sending before the connection was up
-setTimeout( function() {
-        client.send(
-                ioutils.encode(
-                        { content: "I'm bored!", name: "Tasslehoff" }
-                        )
-                );
-},
-2500);
+setInterval( function() { client.send(ioutils.encode(response)); }, 5000);
