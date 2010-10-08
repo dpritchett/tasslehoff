@@ -5,3 +5,13 @@ Tasslehoff should be a server-side client for [socket.io](http://github.com/Lear
 How does it work?
 -----------------
 Tasslehoff uses pgriess's [node-websocket-client](http://github.com/pgriess/node-websocket-client) to handle the connection to socket.io and it adds a bit of socket.io-specific message handling on top of the basic websocket support.
+
+INSTALL
+-------
+`git clone git://github.com/dpritchett/tasslehoff.git --recursive`
+`cd tasslehoff`
+
+Do a test run!
+--------------
+`node client.js dpritchett.no.de`
+
