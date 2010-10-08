@@ -13,5 +13,6 @@ INSTALL
 
 Do a test run!
 --------------
-`node client.js dpritchett.no.de`
+* `node client.js dpritchett.no.de`
+* Open [dpritchett.no.de](http://dpritchett.no.de) in a browser to see your client spamming the chatroom via socket.io.
 
