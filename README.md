@@ -8,8 +8,8 @@ Tasslehoff uses pgriess's [node-websocket-client](http://github.com/pgriess/node
 
 INSTALL
 -------
-`git clone git://github.com/dpritchett/tasslehoff.git --recursive`
-`cd tasslehoff`
+* `git clone git://github.com/dpritchett/tasslehoff.git --recursive`
+* `cd tasslehoff`
 
 Do a test run!
 --------------
