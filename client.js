@@ -1,46 +1,32 @@
-/*
- * Tasslehoff is a node-based socket.io client with aspirations to be a chatbot
- * 
- * contact: dpritchett@gmail.com
- *          http://github.com/dpritchett
- *          @dpritchett on twitter
- */
-var sys = require('sys'),
-    WebSocket = require('websocket-client').WebSocket,
-    ioutils = require('./support/socket.io/lib/socket.io/utils.js');
-
-//process command-line arguments i.e.
-//$ node client.js dpritchett.no.de
-var $SERVER = ( process.argv[2] || "localhost:80");
-if($SERVER.search(":") == -1){
-        $SERVER += ":80";
-}
-
-
-var client = new WebSocket('ws://' + $SERVER + '/socket.io/websocket'),
-response = {
-        name: "Tasslehoff",
-        content: "I'm bored!"
-};
-
-//note that .onmessage automatically pongs back on heartbeat pings
-//in order to avoid being dropped by the server
-client.onmessage = function(m) {
-        m = ioutils.decode(m); //m should be an array of strings
-        var heartbeat = '~h~'; 
-        var currMsg;
-
-        while(m.length){
-                currMsg = m.pop();
-                console.log('Got message: ' + sys.inspect(currMsg));
-
-                // server will drop us if we don't respond to 'heartbeats'
-                // by resending the same text asap
-                if (currMsg.substr(0, 3) == heartbeat){
-                        client.send(ioutils.encode(heartbeat + currMsg.substr(3)));
-                }
-        }
-};
-
-// had to delay this because i was sending before the connection was up
-setInterval( function() { client.send(ioutils.encode(response)); }, 5000);
+(function() {
+  var SERVER, WebSocket, client, ioutils, response, sys;
+  sys = require('sys');
+  WebSocket = require('websocket-client').WebSocket;
+  ioutils = require('./support/socket.io/lib/socket.io/utils.js');
+  SERVER = process.argv[2] || 'localhost:80';
+  if (SERVER.search(':' === -1)) {
+    SERVER += ':80';
+  }
+  client = new WebSocket("ws://" + (SERVER) + "/socket.io/websocket");
+  response = {
+    name: 'Tasslehoff',
+    content: 'I\'m bored!'
+  };
+  client.onmessage = function(m) {
+    var _result, currMsg, heartbeat;
+    m = ioutils.decode(m);
+    heartbeat = '~h~';
+    _result = [];
+    while (m.length) {
+      _result.push((function() {
+        currMsg = m.pop();
+        console.log("Got message: " + (sys.inspect(currMsg)));
+        return currMsg.substr(0, 3) === heartbeat ? client.send(ioutils.encode(heartbeat + currMsg.substr(3))) : null;
+      })());
+    }
+    return _result;
+  };
+  setInterval(function() {
+    return client.send(ioutils.encode(response));
+  }, 5000);
+}).call(this);
