@@ -10,16 +10,15 @@
   client = new WebSocket("ws://" + (SERVER) + "/socket.io/websocket");
   response = {
     name: 'Tasslehoff',
-    content: 'I\'m bored!'
+    content: "I'm bored!"
   };
   client.onmessage = function(m) {
     var _result, currMsg, heartbeat;
     m = ioutils.decode(m);
     heartbeat = '~h~';
     _result = [];
-    while (m.length) {
+    while (currMsg = m.pop()) {
       _result.push((function() {
-        currMsg = m.pop();
         console.log("Got message: " + (sys.inspect(currMsg)));
         return currMsg.substr(0, 3) === heartbeat ? client.send(ioutils.encode(heartbeat + currMsg.substr(3))) : null;
       })());
