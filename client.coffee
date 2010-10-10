@@ -14,7 +14,7 @@ ioutils   = require './support/socket.io/lib/socket.io/utils.js'
 #$ node client.js dpritchett.no.de
 SERVER    =  process.argv[2] || 'localhost:80'
 
-if SERVER.search ':' is -1
+if SERVER.search(':') is -1
         SERVER += ':80'
 
 client    = new WebSocket "ws://#{SERVER}/socket.io/websocket"

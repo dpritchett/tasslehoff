@@ -4,7 +4,7 @@
   WebSocket = require('websocket-client').WebSocket;
   ioutils = require('./support/socket.io/lib/socket.io/utils.js');
   SERVER = process.argv[2] || 'localhost:80';
-  if (SERVER.search(':' === -1)) {
+  if (SERVER.search(':') === -1) {
     SERVER += ':80';
   }
   client = new WebSocket("ws://" + (SERVER) + "/socket.io/websocket");

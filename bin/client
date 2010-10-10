@@ -1,0 +1,6 @@
+#!/bin/bash
+if
+        coffee -c --lint client.coffee
+then
+        node ./client.js $1
+fi
